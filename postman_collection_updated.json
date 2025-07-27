@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "FitAI Backend API - Complete Flow",
-    "description": "Complete API collection for FitAI fitness and nutrition backend with AI-powered plan generation, workout tracking, and meal management",
+    "name": "FitAI Backend API - Complete Flow (Updated)",
+    "description": "Complete API collection for FitAI fitness and nutrition backend with AI-powered plan generation, automatic workout/meal creation, and plan modification capabilities",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -49,18 +49,6 @@
               "raw": "{{baseUrl}}/health",
               "host": ["{{baseUrl}}"],
               "path": ["health"]
-            }
-          }
-        },
-        {
-          "name": "API Documentation",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/docs",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "docs"]
             }
           }
         }
@@ -140,91 +128,6 @@
               "path": ["api", "auth", "login"]
             }
           }
-        },
-        {
-          "name": "Refresh Token",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/refresh",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "refresh"]
-            }
-          }
-        },
-        {
-          "name": "Logout",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/logout",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "logout"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "👤 User Profile",
-      "item": [
-        {
-          "name": "Get User Profile",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/user/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "profile"]
-            }
-          }
-        },
-        {
-          "name": "Update User Profile",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"firstName\": \"John Updated\",\n  \"lastName\": \"Doe Updated\",\n  \"phoneNumber\": \"+1234567891\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/user/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "profile"]
-            }
-          }
         }
       ]
     },
@@ -267,53 +170,11 @@
               "path": ["api", "profile", "setup"]
             }
           }
-        },
-        {
-          "name": "Get Fitness Profile",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "profile"]
-            }
-          }
-        },
-        {
-          "name": "Update Fitness Profile",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"goal\": \"muscle_gain\",\n  \"workoutPlan\": \"strength_training\",\n  \"mealPlan\": \"high_protein\",\n  \"diet\": \"keto\",\n  \"equipment\": \"gym\",\n  \"experience\": \"intermediate\",\n  \"preferences\": \"morning workouts\",\n  \"daysPerWeek\": 5\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/profile",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "profile"]
-            }
-          }
         }
       ]
     },
     {
-      "name": "🤖 AI Services",
+      "name": "🤖 AI Services & Plan Management",
       "item": [
         {
           "name": "Generate AI Plan",
@@ -391,7 +252,7 @@
           }
         },
         {
-          "name": "Confirm Plan",
+          "name": "Confirm Plan (Auto-Create Workouts & Meals)",
           "event": [
             {
               "listen": "test",
@@ -424,7 +285,7 @@
           }
         },
         {
-          "name": "Get User Schedule",
+          "name": "Get User Schedule (7 days)",
           "event": [
             {
               "listen": "test",
@@ -486,7 +347,7 @@
           }
         },
         {
-          "name": "Modify Plan - Workout",
+          "name": "Modify Plan - Workout Only",
           "event": [
             {
               "listen": "test",
@@ -526,7 +387,7 @@
           }
         },
         {
-          "name": "Modify Plan - Meal",
+          "name": "Modify Plan - Meal Only",
           "event": [
             {
               "listen": "test",
@@ -662,56 +523,6 @@
               "path": ["api", "v1", "ai", "chat"]
             }
           }
-        },
-        {
-          "name": "Chat with AI - Nutrition Question",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"plan_id\": \"{{planId}}\",\n  \"message\": \"What should I eat before and after my workout?\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/ai/chat",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "ai", "chat"]
-            }
-          }
-        },
-        {
-          "name": "Chat with AI - Progress Question",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"plan_id\": \"{{planId}}\",\n  \"message\": \"I'm not seeing results after 2 weeks, what should I adjust?\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/ai/chat",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "ai", "chat"]
-            }
-          }
         }
       ]
     },
@@ -750,23 +561,6 @@
           }
         },
         {
-          "name": "Get Weekly Workouts",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/workouts/weekly/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "workouts", "weekly", "1"]
-            }
-          }
-        },
-        {
           "name": "Start Workout",
           "request": {
             "method": "POST",
@@ -780,31 +574,6 @@
               "raw": "{{baseUrl}}/api/v1/workouts/start/{{workoutId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "workouts", "start", "{{workoutId}}"]
-            }
-          }
-        },
-        {
-          "name": "Update Exercise Completion",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"completed_sets\": 3,\n  \"weight\": 50,\n  \"notes\": \"Felt strong today!\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/workouts/exercise/{{workoutId}}/0",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "workouts", "exercise", "{{workoutId}}", "0"]
             }
           }
         },
@@ -830,77 +599,6 @@
               "raw": "{{baseUrl}}/api/v1/workouts/complete/{{workoutId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "workouts", "complete", "{{workoutId}}"]
-            }
-          }
-        },
-        {
-          "name": "Skip Workout",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"notes\": \"Not feeling well today\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/workouts/skip/{{workoutId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "workouts", "skip", "{{workoutId}}"]
-            }
-          }
-        },
-        {
-          "name": "Get Workout History",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/workouts/history?limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "workouts", "history"],
-              "query": [
-                {
-                  "key": "limit",
-                  "value": "10"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Get Workout Stats",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/workouts/stats?period=week",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "workouts", "stats"],
-              "query": [
-                {
-                  "key": "period",
-                  "value": "week"
-                }
-              ]
             }
           }
         }
@@ -939,23 +637,6 @@
               "raw": "{{baseUrl}}/api/v1/meals/daily/1",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "meals", "daily", "1"]
-            }
-          }
-        },
-        {
-          "name": "Get Weekly Meals",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/meals/weekly/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "meals", "weekly", "1"]
             }
           }
         },
@@ -1000,225 +681,6 @@
               "path": ["api", "v1", "meals", "consume", "{{mealId}}"]
             }
           }
-        },
-        {
-          "name": "Skip Meal",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"notes\": \"Not hungry\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/meals/skip/{{mealId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "meals", "skip", "{{mealId}}"]
-            }
-          }
-        },
-        {
-          "name": "Update Meal",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"notes\": \"Added extra vegetables\",\n  \"rating\": 4\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/meals/{{mealId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "meals", "{{mealId}}"]
-            }
-          }
-        },
-        {
-          "name": "Get Weekly Nutrition Summary",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/meals/nutrition-summary/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "meals", "nutrition-summary", "1"]
-            }
-          }
-        },
-        {
-          "name": "Get Meal History",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/meals/history?limit=10&mealType=breakfast",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "meals", "history"],
-              "query": [
-                {
-                  "key": "limit",
-                  "value": "10"
-                },
-                {
-                  "key": "mealType",
-                  "value": "breakfast"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Get Meal Stats",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/meals/stats?period=week",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "meals", "stats"],
-              "query": [
-                {
-                  "key": "period",
-                  "value": "week"
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "📊 Progress Tracking",
-      "item": [
-        {
-          "name": "Get Current Progress",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/progress/current",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "progress", "current"]
-            }
-          }
-        },
-        {
-          "name": "Complete Today's Workout",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    console.log('Today completed and next day started');",
-                  "}"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/progress/complete",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "progress", "complete"]
-            }
-          }
-        },
-        {
-          "name": "Get Progress History",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/progress/history",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "progress", "history"]
-            }
-          }
-        },
-        {
-          "name": "Shift Day Forward",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/progress/day/forward",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "progress", "day", "forward"]
-            }
-          }
-        },
-        {
-          "name": "Shift Day Backward",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/progress/day/backward",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "progress", "day", "backward"]
-            }
-          }
         }
       ]
     },
@@ -1258,38 +720,6 @@
           }
         },
         {
-          "name": "Complete User Journey - Muscle Gain",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "// This simulates a complete user journey for muscle gain",
-                  "console.log('Starting muscle gain journey test...');"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"musclegain@fitai.com\",\n  \"firstName\": \"Mike\",\n  \"lastName\": \"Wilson\",\n  \"phoneNumber\": \"+1234567893\",\n  \"birthDate\": \"1992-03-20\",\n  \"password\": \"password123\",\n  \"gender\": \"male\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "register"]
-            }
-          }
-        },
-        {
           "name": "Error Handling - Invalid Plan ID",
           "request": {
             "method": "POST",
@@ -1311,31 +741,6 @@
               "raw": "{{baseUrl}}/api/v1/ai/chat",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "ai", "chat"]
-            }
-          }
-        },
-        {
-          "name": "Error Handling - Missing Profile",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/ai/generate-plan",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "ai", "generate-plan"]
             }
           }
         }

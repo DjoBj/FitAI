@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { Plan } from '@/models/plan.model';
 import { User } from '@/models/user.model';
+import { activatePlan } from '@/api/v1/services/planActivation.service';
 
 /**
  * @route   POST /api/ai/confirm-plan/:id
- * @desc    Confirm and activate a previously generated plan
+ * @desc    Confirm and activate a previously generated plan, automatically creating workouts and meals
  * @access  Private
  */
 export const confirmPlan = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,20 +23,34 @@ export const confirmPlan = async (req: Request, res: Response, next: NextFunctio
       return res.status(404).json({ success: false, message: 'Plan not found' });
     }
 
-    // Update plan status to active
-    plan.status = 'active';
-    await plan.save();
+    // Check if plan is already active
+    if (plan.status === 'active') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Plan is already active' 
+      });
+    }
 
-    // Update user's currentPlanId to reference this active plan
-    await User.findByIdAndUpdate(userId, { currentPlanId: planId });
+    // Activate the plan - this will create all workouts and meals
+    const activationResult = await activatePlan(planId, userId.toString());
 
     return res.status(200).json({
       success: true,
-      message: 'Plan confirmed and activated',
-      data: plan
+      message: activationResult.message,
+      data: {
+        plan: plan,
+        activationDetails: {
+          workoutsCreated: activationResult.workoutsCreated,
+          mealsCreated: activationResult.mealsCreated,
+          startDate: activationResult.startDate
+        }
+      }
     });
   } catch (error) {
-    next(error);
-    return;
+    console.error('Error confirming plan:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Failed to confirm plan' 
+    });
   }
 };
