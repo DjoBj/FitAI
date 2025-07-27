@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { modifyPlan, getPlanModificationHistory } from '@/api/v1/services/planModification.service';
 
 /**
@@ -6,7 +6,7 @@ import { modifyPlan, getPlanModificationHistory } from '@/api/v1/services/planMo
  * @desc    Modify an active plan with new workouts and/or meals
  * @access  Private
  */
-export const modifyPlanController = async (req: Request, res: Response, next: NextFunction) => {
+export const modifyPlanController = async (req: Request, res: Response) => {
   try {
     const planId = req.params.id;
     const userId = req.user?._id;
@@ -79,7 +79,7 @@ export const modifyPlanController = async (req: Request, res: Response, next: Ne
  * @desc    Get modification history for a plan
  * @access  Private
  */
-export const getPlanHistory = async (req: Request, res: Response, next: NextFunction) => {
+export const getPlanHistory = async (req: Request, res: Response) => {
   try {
     const planId = req.params.id;
     const userId = req.user?._id;

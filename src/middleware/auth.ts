@@ -20,7 +20,7 @@ interface JwtPayload {
 
 export class AuthMiddleware {
   public static generateAccessToken(user: IUser): string {
-    return jwt.sign({ userId: user._id, email: user.email }, config.JWT_SECRET, {
+    return (jwt as any).sign({ userId: user._id, email: user.email }, config.JWT_SECRET, {
       expiresIn: config.JWT_EXPIRE,
       issuer: 'fitai-backend',
       audience: 'fitai-users'
@@ -28,7 +28,7 @@ export class AuthMiddleware {
   }
 
   public static generateRefreshToken(user: IUser): string {
-    return jwt.sign({ userId: user._id }, config.JWT_REFRESH_SECRET, {
+    return (jwt as any).sign({ userId: user._id }, config.JWT_REFRESH_SECRET, {
       expiresIn: config.JWT_REFRESH_EXPIRE,
       issuer: 'fitai-backend',
       audience: 'fitai-refresh'
@@ -36,25 +36,27 @@ export class AuthMiddleware {
   }
 
   public static verifyRefreshToken(token: string): JwtPayload {
-    return jwt.verify(token, config.JWT_REFRESH_SECRET, {
+    return (jwt as any).verify(token, config.JWT_REFRESH_SECRET, {
       issuer: 'fitai-backend',
       audience: 'fitai-refresh'
     }) as JwtPayload;
   }
 
-  public static async authenticate(req: Request, res: Response, next: NextFunction) {
+  public static async authenticate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const authHeader = req.header('Authorization');
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, message: 'Unauthorized' });
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
       }
 
       const token = authHeader.slice(7);
-      const decoded = jwt.verify(token, config.JWT_SECRET) as JwtPayload;
+      const decoded = (jwt as any).verify(token, config.JWT_SECRET) as JwtPayload;
 
       const user = await User.findById(decoded.userId);
       if (!user) {
-        return res.status(401).json({ success: false, message: 'User not found' });
+        res.status(401).json({ success: false, message: 'User not found' });
+        return;
       }
 
       req.user = user;

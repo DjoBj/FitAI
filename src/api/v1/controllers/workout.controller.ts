@@ -49,8 +49,8 @@ export const getDailyWorkout = async (req: Request, res: Response, next: NextFun
       const weekNumber = Math.ceil(dayNumber / 7);
       
       // Get workout data from plan
-      const planWorkout = plan.workoutPlan?.weeks?.find(week => week.week === weekNumber);
-      const dayWorkout = planWorkout?.days?.find(day => day.day === dayNumber);
+      const planWorkout = plan.workoutPlan?.weeks?.find((week: any) => week.week === weekNumber);
+      const dayWorkout = planWorkout?.days?.find((day: any) => day.day === dayNumber);
 
       if (!dayWorkout) {
         return res.status(404).json({ success: false, message: 'No workout planned for this day' });
@@ -64,7 +64,7 @@ export const getDailyWorkout = async (req: Request, res: Response, next: NextFun
         week_number: weekNumber,
         workout_date: new Date(),
         status: 'pending',
-        exercises: dayWorkout.exercises.map(exercise => ({
+        exercises: dayWorkout.exercises.map((exercise: any) => ({
           name: exercise.name,
           sets: exercise.sets,
           reps: exercise.reps,

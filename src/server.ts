@@ -62,7 +62,7 @@ class FitAIServer {
       this.app.use(morgan('combined'));
     }
 
-    this.app.use((req, res, next) => {
+    this.app.use((req, _res, next) => {
       req.requestTime = new Date().toISOString();
       req.requestId = Math.random().toString(36).substring(2, 15);
       next();
@@ -70,7 +70,7 @@ class FitAIServer {
   }
 
   private initializeRoutes(): void {
-    this.app.get('/health', (req, res) => {
+    this.app.get('/health', (_req, res) => {
       res.status(200).json({
         success: true,
         message: 'FitAI Backend is running successfully',
@@ -86,7 +86,7 @@ class FitAIServer {
       });
     });
 
-    this.app.get('/api', (req, res) => {
+    this.app.get('/api', (_req, res) => {
       res.status(200).json({
         success: true,
         message: 'Welcome to FitAI API',

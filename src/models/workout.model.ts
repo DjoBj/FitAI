@@ -24,6 +24,11 @@ export interface IWorkout extends Document {
   completedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+  
+  // Methods
+  startWorkout(): Promise<IWorkout>;
+  completeWorkout(): Promise<IWorkout>;
+  skipWorkout(): Promise<IWorkout>;
 }
 
 const exerciseSchema = new Schema({
@@ -144,7 +149,7 @@ workoutSchema.methods.completeWorkout = function() {
   this.completedAt = new Date();
   
   // Mark all exercises as completed
-  this.exercises.forEach(exercise => {
+  this.exercises.forEach((exercise: any) => {
     exercise.completed_sets = exercise.sets;
   });
   
@@ -183,4 +188,10 @@ workoutSchema.statics.getCurrentWeekWorkouts = function(userId: string, planId: 
   }).sort({ day_number: 1 });
 };
 
-export const Workout = mongoose.model<IWorkout>('Workout', workoutSchema); 
+// Interface for static methods
+interface IWorkoutModel extends mongoose.Model<IWorkout> {
+  getWorkoutsByDateRange(userId: string, startDate: Date, endDate: Date): Promise<IWorkout[]>;
+  getCurrentWeekWorkouts(userId: string, planId: string, weekNumber: number): Promise<IWorkout[]>;
+}
+
+export const Workout = mongoose.model<IWorkout, IWorkoutModel>('Workout', workoutSchema); 

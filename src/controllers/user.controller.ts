@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { User } from '../models/user.model';
 
 export class UserController {
   public static async getProfile(req: Request, res: Response): Promise<void> {

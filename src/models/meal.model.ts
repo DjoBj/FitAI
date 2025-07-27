@@ -32,6 +32,11 @@ export interface IMeal extends Document {
   rating?: number; // 1-5 scale
   createdAt: Date;
   updatedAt: Date;
+  
+  // Methods
+  prepareMeal(): Promise<IMeal>;
+  consumeMeal(consumptionData?: any): Promise<IMeal>;
+  skipMeal(): Promise<IMeal>;
 }
 
 const mealDataSchema = new Schema({
@@ -274,4 +279,11 @@ mealSchema.statics.getWeeklyNutritionSummary = function(userId: string, planId: 
   ]);
 };
 
-export const Meal = mongoose.model<IMeal>('Meal', mealSchema); 
+// Interface for static methods
+interface IMealModel extends mongoose.Model<IMeal> {
+  getDailyMeals(userId: string, planId: string, dayNumber: number): Promise<IMeal[]>;
+  getMealsByDateRange(userId: string, startDate: Date, endDate: Date): Promise<IMeal[]>;
+  getWeeklyNutritionSummary(userId: string, planId: string, weekNumber: number): Promise<any[]>;
+}
+
+export const Meal = mongoose.model<IMeal, IMealModel>('Meal', mealSchema); 

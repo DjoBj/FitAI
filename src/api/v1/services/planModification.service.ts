@@ -1,7 +1,6 @@
 import { Plan } from '@/models/plan.model';
 import { Workout, IWorkout } from '@/models/workout.model';
 import { Meal, IMeal } from '@/models/meal.model';
-import { User } from '@/models/user.model';
 
 interface PlanModificationRequest {
   planId: string;
@@ -146,7 +145,7 @@ const updateMeals = async (
 /**
  * Calculate workout date based on plan start date
  */
-const calculateWorkoutDate = (planId: string, weekNumber: number, dayNumber: number): Date => {
+const calculateWorkoutDate = (_planId: string, weekNumber: number, dayNumber: number): Date => {
   // This is a simplified calculation - in a real implementation,
   // you'd want to get the actual plan start date from the database
   const today = new Date();
@@ -162,7 +161,7 @@ const calculateWorkoutDate = (planId: string, weekNumber: number, dayNumber: num
 /**
  * Calculate meal date based on plan start date
  */
-const calculateMealDate = (planId: string, weekNumber: number, dayNumber: number): Date => {
+const calculateMealDate = (_planId: string, weekNumber: number, dayNumber: number): Date => {
   // Similar to workout date calculation
   const today = new Date();
   const startDate = new Date(today);

@@ -69,6 +69,7 @@ const createWeekWorkouts = async (
     // Calculate the actual date for this workout
     const workoutDate = new Date(startDate);
     workoutDate.setDate(startDate.getDate() + (dayData.day - 1));
+    workoutDate.setHours(0, 0, 0, 0); // Ensure it's set to beginning of day
 
     const workout = new Workout({
       user_id: userId,
@@ -112,6 +113,7 @@ const createWeekMeals = async (
   for (let dayNumber = 1; dayNumber <= 7; dayNumber++) {
     const mealDate = new Date(startDate);
     mealDate.setDate(startDate.getDate() + (dayNumber - 1));
+    mealDate.setHours(0, 0, 0, 0); // Ensure it's set to beginning of day
 
     for (const mealType of mealTypes) {
       const mealData = dailyTemplate.meals[mealType];
@@ -166,15 +168,20 @@ const getPlanStartDate = (): Date => {
   const today = new Date();
   const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
   
+  let startDate: Date;
+  
   // If today is Monday, start today. Otherwise, start next Monday
   if (dayOfWeek === 1) {
-    return new Date(today);
+    startDate = new Date(today);
   } else {
     const daysUntilMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek;
-    const startDate = new Date(today);
+    startDate = new Date(today);
     startDate.setDate(today.getDate() + daysUntilMonday);
-    return startDate;
   }
+  
+  // Set the time to beginning of day (00:00:00)
+  startDate.setHours(0, 0, 0, 0);
+  return startDate;
 };
 
 /**
@@ -282,9 +289,21 @@ export const getUpcomingSchedule = async (userId: string, days: number = 7): Pro
   meals: IMeal[];
 }> => {
   try {
+    // Set start date to beginning of today (00:00:00)
     const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    
+    // Set end date to end of the requested day (23:59:59)
     const endDate = new Date();
     endDate.setDate(startDate.getDate() + days);
+    endDate.setHours(23, 59, 59, 999);
+
+    console.log('Schedule query parameters:', {
+      userId,
+      days,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    });
 
     const workouts = await Workout.find({
       user_id: userId,
@@ -295,6 +314,13 @@ export const getUpcomingSchedule = async (userId: string, days: number = 7): Pro
       user_id: userId,
       meal_date: { $gte: startDate, $lte: endDate }
     }).sort({ meal_date: 1, meal_type: 1 });
+
+    console.log('Schedule query results:', {
+      workoutsFound: workouts.length,
+      mealsFound: meals.length,
+      workoutDates: workouts.map(w => w.workout_date.toISOString()),
+      mealDates: meals.map(m => m.meal_date.toISOString())
+    });
 
     return { workouts, meals };
   } catch (error) {

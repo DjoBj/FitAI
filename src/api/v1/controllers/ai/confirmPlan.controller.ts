@@ -1,6 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { Plan } from '@/models/plan.model';
-import { User } from '@/models/user.model';
 import { activatePlan } from '@/api/v1/services/planActivation.service';
 
 /**
@@ -8,7 +7,7 @@ import { activatePlan } from '@/api/v1/services/planActivation.service';
  * @desc    Confirm and activate a previously generated plan, automatically creating workouts and meals
  * @access  Private
  */
-export const confirmPlan = async (req: Request, res: Response, next: NextFunction) => {
+export const confirmPlan = async (req: Request, res: Response) => {
   try {
     const planId = req.params.id;
     const userId = req.user?._id;
